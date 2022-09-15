@@ -1,0 +1,111 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="container col-md-10 text-center mt-3">
+<tr>
+        <th colspan="3" ><li><a class="text text-primary"><h2>List of Grade<h2></a></li></th>
+         {% if is_granted ('ROLE_ADMIN') or is_granted ('ROLE_TEACHER')%}
+        <th> <a class="btn btn-info text-center" href="{{ path('grade_add')}}">Add new grade</a>
+        </th>
+        {% endif %}
+        <br>
+        {# <form action="" method="post">
+			<input type="search" name="name" id="">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form> #}
+	
+		<table class="table table-info table-hover mt-5">
+			<tr>
+				
+				
+									<h6 class="text text-success">Sort Grade</h6>							
+									<select class="form-control" onchange="window.location.href=this.value">
+										<option>Select one</option>
+										<option value="{{ path('grade_asc')}}"> Ascending</option>
+										<option value="{{ path('grade_desc')}}"> Descending</option>
+									</select>
+							
+            </tr>
+ </div>
+ 
+    
+ 
+<table class="table table-info">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Student ID</th>
+            <th>Scores</th>
+            <th>Teacher grading</th>
+            <th>Subjects</th>
+            <th>Comment</th>
+            {% if is_granted ('ROLE_ADMIN') %}
+            <th>Action</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+ 
+    {% set i = 1 %}
+    {% for grade in grade %}
+        <tr>
+            <td>{{ i }}</td> 
+             <td>{% if grade.student != null %}
+                      <a>
+                           {{ grade.student.studentid }} 
+                        </a>
+                     {% else %}
+                        N/A
+                     {% endif %}
+                        </td>
+            
+            <td>{{ grade.grade }}đ</td>
+            
+            <td>{% if grade.teacher != null %}
+                      <a>
+                           {{ grade.teacher.name }} 
+                        </a>
+                     {% else %}
+                        N/A
+                     {% endif %}
+             </td>
+
+            <td>{% if grade.course != null %}
+                      <a>
+                           {{ grade.course.name }} 
+                        </a>
+                     {% else %}
+                        N/A
+                     {% endif %}
+             </td>
+
+             
+
+            <td>{{ grade.comment }}</td>
+             {% if is_granted ('ROLE_ADMIN') or is_granted ('ROLE_TEACHER')%}
+            
+            <td>
+          
+               
+                <a href="{{path('grade_edit',{'id': grade.id})}}">
+                    <img src="{{ asset('images/edit.png')}}" width="30" height="30">
+                </a>
+                <a  href="{{path('grade_delete',{'id': grade.id})}}"
+
+                onclick="return confirm('Are you sure to delete this Grade ?')";
+
+                onclick="return confirm('Are you sure to delete this grade ?')";
+
+                >
+                    <img src="{{ asset('images/delete.png')}}" width="30" height="30">
+                </a>
+            </td>
+            {% endif %}
+            
+        </tr>
+        {% set i = i + 1 %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
